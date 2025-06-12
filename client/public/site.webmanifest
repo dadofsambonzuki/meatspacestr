@@ -1,0 +1,17 @@
+{
+  "name": "meatspacestr - Proof-of-Place Verification",
+  "short_name": "meatspacestr",
+  "description": "Cryptographically verify that a Nostr identity in cyberspace has access to a physical address in meatspace",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}
