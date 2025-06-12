@@ -71,28 +71,9 @@ export function VerificationPDF({
           <div style="width: 120px;"></div>
         </div>
 
-        <!-- Address Area for Address (22/60/85.5/25.5mm) -->
-        <div style="position: absolute; left: 22mm; top: 60mm; width: 85.5mm; height: 25.5mm; padding: 3mm; box-sizing: border-box;">
-          <div style="color: #333; font-size: 12px; line-height: 1.3; text-align: left;">`;
-      
-      // Add merchant name and address if available
-      if (verification.merchantName) {
-        htmlContent += `<div style="font-weight: bold; margin-bottom: 2mm;">${escapeHtml(verification.merchantName)}</div>`;
-      }
-      
-      if (verification.merchantAddress) {
-        // Replace commas and line breaks with consistent line breaks for better formatting
-        const formattedAddress = escapeHtml(verification.merchantAddress)
-          .replace(/\r\n/g, '<br>')  // Windows line endings
-          .replace(/\n/g, '<br>')    // Unix line endings
-          .replace(/,\s*/g, '<br>'); // Commas with optional spaces
-        htmlContent += `<div>${formattedAddress}</div>`;
-      } else {
-        htmlContent += `Address will be displayed here`;
-      }
-      
-      htmlContent += `
-          </div>
+        <!-- Address Area placeholder (22/60/85.5/25.5mm) -->
+        <div style="position: absolute; left: 22mm; top: 60mm; width: 85.5mm; height: 25.5mm; border: 1px solid #eee; background: #fafafa;">
+          <!-- Address text will be added as selectable PDF text overlay -->
         </div>
 
         <div style="margin-top: 100mm;">`;
@@ -222,14 +203,50 @@ export function VerificationPDF({
 
       let position = 0;
 
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
+      }
+
+      // Add selectable text overlay for address area (22/60/85.5/25.5mm)
+      if (verification.merchantName || verification.merchantAddress) {
+        pdf.setFontSize(10);
+        pdf.setTextColor(0, 0, 0); // Black color for better readability
+        
+        let yPosition = 65; // Starting Y position (60mm + 5mm padding)
+        
+        // Add merchant name if available
+        if (verification.merchantName) {
+          pdf.setFont("helvetica", "bold");
+          pdf.text(verification.merchantName, 25, yPosition); // 22mm + 3mm padding
+          yPosition += 4; // Move down for next line
+        }
+        
+        // Add address if available
+        if (verification.merchantAddress) {
+          pdf.setFont("helvetica", "normal");
+          
+          // Parse address lines (handle commas and line breaks)
+          const addressLines = verification.merchantAddress
+            .replace(/\r\n/g, '\n')
+            .replace(/\n/g, '|')
+            .replace(/,\s*/g, '|')
+            .split('|')
+            .filter(line => line.trim().length > 0);
+          
+          // Add each line of the address
+          addressLines.forEach((line, index) => {
+            const currentY = yPosition + (index * 3.5);
+            if (currentY < 83) { // Stay within address area height (60mm + 25.5mm - 2.5mm padding)
+              pdf.text(line.trim(), 25, currentY); // 22mm + 3mm padding
+            }
+          });
+        }
       }
 
       // Clean up
