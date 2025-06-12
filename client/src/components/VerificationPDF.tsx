@@ -67,16 +67,57 @@ export function VerificationPDF({
           </div>
           <br>
           <div style="text-align: center; flex: 1;">
-            <h1 style="color: #333; margin-bottom: 10px; font-size: 28px;">Proof of Place</h1>
-            <p style="color: #666; font-size: 14px; max-width: 600px; margin: 0 auto; line-height: 1.4;">
-              Please scan the QR below to unlock your verification request. This will enable the attestor (${senderDisplayName}) to attest to a link between your Nostr identity in cyberspace and your physical address in meatspace.
-            </p>
           </div>
           <div style="width: 120px;"></div>
         </div>
 
-        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin: 40px 0;">
-          <!-- Sender -->
+        <!-- Address Area for Address (22/60/85.5/25.5mm) -->
+        <div style="position: absolute; left: 22mm; top: 60mm; width: 85.5mm; height: 25.5mm; padding: 3mm; box-sizing: border-box;">
+          <div style="color: #333; font-size: 12px; line-height: 1.3; text-align: left;">`;
+      
+      // Add merchant name and address if available
+      if (verification.merchantName) {
+        htmlContent += `<div style="font-weight: bold; margin-bottom: 2mm;">${escapeHtml(verification.merchantName)}</div>`;
+      }
+      
+      if (verification.merchantAddress) {
+        // Replace commas and line breaks with consistent line breaks for better formatting
+        const formattedAddress = escapeHtml(verification.merchantAddress)
+          .replace(/\r\n/g, '<br>')  // Windows line endings
+          .replace(/\n/g, '<br>')    // Unix line endings
+          .replace(/,\s*/g, '<br>'); // Commas with optional spaces
+        htmlContent += `<div>${formattedAddress}</div>`;
+      } else {
+        htmlContent += `Address will be displayed here`;
+      }
+      
+      htmlContent += `
+          </div>
+        </div>
+
+        <div style="margin-top: 100mm;">`;
+      
+      // Add "Proof of Place for <merchant>" title
+      if (verification.merchantName) {
+        htmlContent += `
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #333; font-size: 28px; margin: 0; font-weight: bold;">Proof of Place for ${escapeHtml(verification.merchantName)}</h1>
+          </div>`;
+      } else {
+        htmlContent += `
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #333; font-size: 28px; margin: 0; font-weight: bold;">Proof of Place</h1>
+          </div>`;
+      }
+      
+      htmlContent += `
+          <div style="text-align: center; margin-bottom: 20px;">
+            <p style="color: #666; font-size: 14px; max-width: 600px; margin: 0 auto; line-height: 1.4;">
+              Please scan the QR below to unlock your verification request. This will enable the attestor (${senderDisplayName}) to attest to a link between your Nostr identity in cyberspace and your physical address in meatspace.
+            </p>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; margin: 40px 0;">
           <div style="text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-height: 200px;">
             <div style="width: 80px; height: 80px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; overflow: hidden;">`;
 
@@ -123,30 +164,8 @@ export function VerificationPDF({
             <div style="font-weight: bold; margin-bottom: 5px; font-size: 16px; color: #222;">${recipientDisplayName}</div>
             <div style="color: #666; font-size: 12px; word-break: break-all;">${escapeHtml(verification.recipientNpub)}</div>
           </div>
+        </div>
         </div>`;
-
-      // Add merchant details section if available
-      if (verification.merchantName || verification.merchantAddress) {
-        htmlContent += `
-          <div style="border-top: 2px solid #eee; padding-top: 30px; margin-top: 30px; text-align: center;">`;
-
-        if (verification.merchantName) {
-          htmlContent += `
-            <div style="margin-bottom: 15px;">
-              <div style="font-weight: bold; color: #333; font-size: 18px; margin-bottom: 5px;">${escapeHtml(verification.merchantName)}</div>
-            </div>`;
-        }
-
-        if (verification.merchantAddress) {
-          htmlContent += `
-            <div style="margin-bottom: 15px;">
-              <div style="color: #666; font-size: 16px;">${escapeHtml(verification.merchantAddress)}</div>
-            </div>`;
-        }
-
-        htmlContent += `
-          </div>`;
-      }
 
       htmlContent += `
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #999; font-size: 12px;">
