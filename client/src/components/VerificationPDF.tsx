@@ -44,7 +44,6 @@ export function VerificationPDF({ verification, note, verificationUrl }: Verific
       // Build the HTML content step by step
       const senderDisplayName = escapeHtml(senderProfile?.display_name || senderProfile?.name || 'Sender');
       const recipientDisplayName = escapeHtml(recipientProfile?.display_name || recipientProfile?.name || 'Recipient');
-      const statusColor = verification.status === 'verified' ? '#22c55e' : '#f59e0b';
       
       let htmlContent = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
@@ -56,7 +55,7 @@ export function VerificationPDF({ verification, note, verificationUrl }: Verific
           <div style="text-align: center; flex: 1;">
             <h1 style="color: #333; margin-bottom: 10px; font-size: 28px;">Proof of Place</h1>
             <p style="color: #666; font-size: 14px; max-width: 600px; margin: 0 auto; line-height: 1.4;">
-              Please scan the QR below to unlock your verification request. This will enable the attestor (${recipientDisplayName}) to attest to a link between your Nostr identity in cyberspace and your physical address in meatspace.
+              Please scan the QR below to unlock your verification request. This will enable the attestor (${senderDisplayName}) to attest to a link between your Nostr identity in cyberspace and your physical address in meatspace.
             </p>
           </div>
           <div style="width: 120px;"></div>
