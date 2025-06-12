@@ -75,9 +75,9 @@ export function VerificationPDF({
           <div style="width: 120px;"></div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; margin: 40px 0;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin: 40px 0;">
           <!-- Sender -->
-          <div style="text-align: center; flex: 1;">
+          <div style="text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-height: 200px;">
             <div style="width: 80px; height: 80px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; overflow: hidden;">`;
 
       if (senderProfile?.picture) {
@@ -93,23 +93,23 @@ export function VerificationPDF({
           </div>
 
           <!-- Arrow -->
-          <div style="flex: 0 0 60px; text-align: center; color: #666;">
+          <div style="flex: 0 0 60px; text-align: center; color: #666; margin-top: 60px;">
             <div style="font-size: 24px;">→</div>
           </div>
 
           <!-- QR Code -->
-          <div style="text-align: center; flex: 1;">
-            <div id="qr-placeholder" style="width: 200px; height: 200px; margin: 0 auto 15px; border: 1px solid #ddd;"></div>
-            <div style="color: #666; font-size: 12px; word-break: break-all;">${escapeHtml(verificationUrl)}</div>
+          <div style="text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-height: 200px; justify-content: center;">
+            <div id="qr-placeholder" style="width: 150px; height: 150px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;"></div>
+            <div style="color: #666; font-size: 12px; word-break: break-all; max-width: 200px;">${escapeHtml(verificationUrl)}</div>
           </div>
 
           <!-- Arrow -->
-          <div style="flex: 0 0 60px; text-align: center; color: #666;">
+          <div style="flex: 0 0 60px; text-align: center; color: #666; margin-top: 60px;">
             <div style="font-size: 24px;">→</div>
           </div>
 
           <!-- Recipient -->
-          <div style="text-align: center; flex: 1;">
+          <div style="text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-height: 200px;">
             <div style="width: 80px; height: 80px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; overflow: hidden;">`;
 
       if (recipientProfile?.picture) {
