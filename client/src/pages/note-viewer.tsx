@@ -105,9 +105,6 @@ export default function NoteViewer() {
     if (userPubkey && currentData?.verification) {
       try {
         const userNpub = hexToBech32(userPubkey);
-        console.log('User npub:', userNpub);
-        console.log('Verification recipient npub:', currentData.verification.recipientNpub);
-        console.log('Match:', userNpub === currentData.verification.recipientNpub);
         setIsRecipient(userNpub === currentData.verification.recipientNpub);
       } catch (error) {
         console.error('Error checking recipient status:', error);
@@ -162,8 +159,8 @@ export default function NoteViewer() {
         queryClient.invalidateQueries({ queryKey: ["/api/verifications"] });
         queryClient.invalidateQueries({ queryKey: ["/api/verify", extractedToken] });
         
-        // Navigate to success page with token
-        navigate(`/success?token=${extractedToken}`);
+        // Navigate to success page without exposing token
+        navigate(`/success`);
       } else {
         toast({
           title: "Verification Failed",
@@ -182,18 +179,11 @@ export default function NoteViewer() {
 
   const attemptDecryption = async () => {
     if (!currentData?.note || !userPubkey) {
-      console.log('Missing note or userPubkey for decryption');
       return;
     }
     
     setIsDecrypting(true);
     try {
-      console.log('=== DECRYPTION DEBUG ===');
-      console.log('User pubkey (hex):', userPubkey);
-      console.log('User npub:', hexToBech32(userPubkey!));
-      console.log('Verification recipient npub:', currentData.verification.recipientNpub);
-      console.log('Note sender npub:', currentData.note.senderNpub);
-      console.log('User is recipient?:', hexToBech32(userPubkey!) === currentData.verification.recipientNpub);
       
       // Parse the Nostr event to extract the encrypted content
       let encryptedContent: string;
@@ -202,29 +192,21 @@ export default function NoteViewer() {
       try {
         // Try to parse as JSON (signed Nostr event)
         const nostrEvent = JSON.parse(currentData.note.nostrEvent);
-        console.log('Parsed Nostr event:', nostrEvent);
         
         if (nostrEvent.content && nostrEvent.pubkey) {
           encryptedContent = nostrEvent.content;
           senderPubkey = nostrEvent.pubkey;
-          console.log('Using content from signed Nostr event');
         } else {
           throw new Error('Invalid Nostr event format');
         }
       } catch (parseError) {
         // Fallback: treat as raw encrypted content
-        console.log('Not a JSON event, treating as raw encrypted content');
         encryptedContent = currentData.note.encryptedContent;
         senderPubkey = bech32ToHex(currentData.note.senderNpub);
       }
       
-      console.log('Final sender pubkey (hex):', senderPubkey);
-      console.log('Final encrypted content:', encryptedContent);
-      console.log('=== END DEBUG ===');
-      
       // Decrypt using real NIP-04 encryption with nostr-tools
       const decrypted = await decryptNip04Message(senderPubkey, encryptedContent);
-      console.log('Decryption result:', decrypted);
       
       if (decrypted) {
         // Extract token from the decrypted content
@@ -419,7 +401,7 @@ export default function NoteViewer() {
                           <VerificationPDF 
                             verification={currentData.verification}
                             note={currentData.note}
-                            verificationUrl={`${window.location.origin}/verify/${currentData.verification.token}`}
+                            verificationUrl={`${window.location.origin}/verification/${currentData.verification.id}`}
                           />
                         )}
                       </div>

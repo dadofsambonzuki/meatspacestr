@@ -1,14 +1,10 @@
-import { useLocation } from "wouter";
+import { Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/ui/navigation";
 import { CheckCircle, Home, List } from "lucide-react";
 
 export default function SuccessPage() {
-  const [location] = useLocation();
-  const searchParams = location.includes('?') ? location.split('?')[1] : '';
-  const urlParams = new URLSearchParams(searchParams);
-  const token = urlParams.get('token');
 
   return (
     <div className="min-h-screen bg-background">
@@ -26,30 +22,22 @@ export default function SuccessPage() {
               <p className="text-green-800 dark:text-green-200">
                 Your nostr identity in cyberspace has been successfully linked to your physical address in meatspace!
               </p>
-              {token && (
-                <p className="text-sm text-green-700 dark:text-green-300 mt-2">
-                  Token: {token.substring(0, 8)}...
-                </p>
-              )}
             </div>
             
             <div className="space-y-2">
-              <Button 
-                onClick={() => window.location.href = '/'}
-                className="w-full"
-              >
-                <Home className="w-4 h-4 mr-2" />
-                Go Home
-              </Button>
+              <Link href="/">
+                <Button className="w-full">
+                  <Home className="w-4 h-4 mr-2" />
+                  Go Home
+                </Button>
+              </Link>
               
-              <Button 
-                onClick={() => window.location.href = '/status'}
-                variant="outline"
-                className="w-full"
-              >
-                <List className="w-4 h-4 mr-2" />
-                View All Notes
-              </Button>
+              <Link href="/status">
+                <Button variant="outline" className="w-full">
+                  <List className="w-4 h-4 mr-2" />
+                  View All Notes
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>

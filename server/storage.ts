@@ -139,7 +139,6 @@ export class DatabaseStorage implements IStorage {
       verificationId
     });
     
-    console.log('Prepared verification with token:', token);
     return { token, verificationUrl };
   }
 

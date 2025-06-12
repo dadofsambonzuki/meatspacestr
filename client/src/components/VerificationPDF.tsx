@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { QRCode } from "@/components/ui/qr-code";
 import { UserProfile } from "@/components/ui/user-profile";
 import { useNostrProfile } from "@/hooks/use-nostr-profile";
-import { Download, ArrowRight } from "lucide-react";
+import { Download, ArrowRight, Anchor } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useRef } from "react";
@@ -48,7 +48,12 @@ export function VerificationPDF({ verification, note, verificationUrl }: Verific
       let htmlContent = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
           <div style="display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: bold; color: #333;">
-            <span style="font-size: 20px;">⚓</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="3"/>
+              <path d="m2 12 10 10 10-10"/>
+              <path d="m7 19 5-5 5 5"/>
+              <path d="M10.5 7.5 16 2l3 3-5.5 5.5"/>
+            </svg>
             <span>meatspacestr</span>
           </div>
           <br>
