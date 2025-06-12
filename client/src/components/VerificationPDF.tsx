@@ -162,8 +162,8 @@ export function VerificationPDF({
       const qrCanvas = document.createElement("canvas");
       const qrCode = await import("qrcode");
       await qrCode.toCanvas(qrCanvas, verificationUrl, {
-        width: 200,
-        margin: 2,
+        width: 150,
+        margin: 1,
         color: {
           dark: "#000000",
           light: "#FFFFFF",
@@ -176,19 +176,25 @@ export function VerificationPDF({
         qrPlaceholder.appendChild(qrCanvas);
       }
 
-      // Wait a bit for images to load
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Wait for images to load (reduced from 1000ms)
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Generate PDF
+      // Generate PDF with optimization
       const canvas = await html2canvas(pdfContainer, {
-        scale: 2,
+        scale: 1.5, // Reduced from 2 to 1.5 for smaller file size
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
       });
 
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
+      // Use JPEG with compression instead of PNG
+      const imgData = canvas.toDataURL("image/jpeg", 0.8); // 80% quality
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+        compress: true, // Enable PDF compression
+      });
 
       const imgWidth = 210; // A4 width in mm
       const pageHeight = 295; // A4 height in mm
@@ -252,7 +258,7 @@ export function VerificationPDF({
             <div className="text-center flex-1">
               <QRCode
                 data={verificationUrl}
-                size={200}
+                size={150}
                 className="mx-auto mb-4"
               />
               <p className="text-xs text-gray-500 break-all">
