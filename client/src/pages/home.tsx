@@ -44,7 +44,7 @@ export default function Home() {
               </div>
               <CardTitle className="text-2xl">Create Attestations</CardTitle>
               <CardDescription className="text-lg">
-                Generate encrypted verification tokens
+                Generate encrypted attestation tokens
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-auto">
@@ -80,9 +80,9 @@ export default function Home() {
               <div className="mx-auto mb-4 p-3 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
                 <Search className="h-8 w-8 text-green-600 dark:text-green-400" />
               </div>
-              <CardTitle className="text-2xl">Complete Verification</CardTitle>
+              <CardTitle className="text-2xl">Complete Attestation</CardTitle>
               <CardDescription className="text-lg">
-                Use tokens to completer verification
+                Use tokens to complete attestation
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-auto">
@@ -113,7 +113,7 @@ export default function Home() {
                 </h3>
                 <p className="text-muted-foreground">
                   Attestor creates a Nostr event with encrypted content
-                  containing a verification token.
+                  containing an attestation token.
                 </p>
               </div>
               <div className="text-center">
@@ -136,7 +136,7 @@ export default function Home() {
                   3. Complete Attestation
                 </h3>
                 <p className="text-muted-foreground">
-                  Attestee decrypts the message and uses the verification token
+                  Attestee decrypts the message and uses the attestation token
                   to complete Proof-of-Place.
                 </p>
               </div>

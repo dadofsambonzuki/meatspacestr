@@ -137,6 +137,20 @@ export default function NoteViewer() {
     }
   }, [userPubkey, currentData]);
 
+  // Refresh data when user logs out to prevent stale content
+  useEffect(() => {
+    if (!user) {
+      // User logged out, refresh the query data
+      queryClient.invalidateQueries({ queryKey: ["/api/verification", id] });
+      // Reset state variables
+      setDecryptedContent(null);
+      setExtractedToken(null);
+      setIsRecipient(false);
+      setIsSender(false);
+      setUserPubkey(null);
+    }
+  }, [user, queryClient, id]);
+
   const handleNostrLogin = async () => {
     if (!hasNostrExtension()) {
       setShowExtensionModal(true);
@@ -239,7 +253,7 @@ export default function NoteViewer() {
 
       if (decrypted) {
         // Extract token from the decrypted content
-        const tokenMatch = decrypted.match(/Verification Token: ([^\s\n]+)/);
+        const tokenMatch = decrypted.match(/Attestation Token: ([^\s\n]+)/);
         const extractToken = tokenMatch ? tokenMatch[1] : null;
 
         setDecryptedContent(decrypted);
@@ -281,7 +295,7 @@ export default function NoteViewer() {
         <div className="flex items-center justify-center pt-16">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading encrypted note...</p>
+            <p className="text-muted-foreground">Loading attestation...</p>
           </div>
         </div>
       </div>
@@ -296,10 +310,10 @@ export default function NoteViewer() {
           <Card className="max-w-md mx-auto">
             <CardContent className="text-center p-8">
               <h1 className="text-xl font-bold text-foreground mb-2">
-                Verification Not Found
+                Attestation Not Found
               </h1>
               <p className="text-muted-foreground mb-4">
-                The verification you're looking for doesn't exist or has been
+                The attestation you're looking for doesn't exist or has been
                 removed.
               </p>
               <Button onClick={() => navigate("/")}>Go Home</Button>
@@ -339,13 +353,13 @@ export default function NoteViewer() {
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold text-foreground mb-2">
                 {isVerificationRoute
-                  ? "Identity Verification"
+                  ? "Identity Attestation"
                   : "Encrypted Nostr Note"}
               </h1>
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <span>
                   {isVerificationRoute
-                    ? "Verification request for"
+                    ? "Attestation request for"
                     : "This note is encrypted for"}
                 </span>
                 <UserProfile
@@ -360,12 +374,12 @@ export default function NoteViewer() {
             {isVerificationRoute && (
               <div className="bg-muted rounded-lg p-6 mb-6">
                 <h2 className="text-lg font-semibold text-foreground mb-4">
-                  Verification Details
+                  Attestation Details
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
-                      Verification ID:
+                      Attestation ID:
                     </span>
                     <span className="font-mono text-foreground">
                       {currentData.verification.id}
@@ -429,14 +443,109 @@ export default function NoteViewer() {
               </div>
             )}
 
+            {/* Connected As Section - directly below Attestation Details */}
+            {isLoggedIn && isVerificationRoute && (
+              <div
+                className={`border rounded-lg p-6 text-center mb-6 ${
+                  isSender
+                    ? "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700"
+                    : isRecipient
+                      ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700"
+                      : "bg-gray-50 dark:bg-gray-900/20 border-gray-200 dark:border-gray-700"
+                }`}
+              >
+                <div className="text-center">
+                  <User
+                    className={`w-6 h-6 mx-auto mb-3 ${
+                      isSender
+                        ? "text-blue-600 dark:text-blue-400"
+                        : isRecipient
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-gray-600 dark:text-gray-400"
+                    }`}
+                  />
+                  <div>
+                    <span
+                      className={`font-medium block mb-3 ${
+                        isSender
+                          ? "text-blue-900 dark:text-blue-100"
+                          : isRecipient
+                            ? "text-green-900 dark:text-green-100"
+                            : "text-gray-900 dark:text-gray-100"
+                      }`}
+                    >
+                      Connected as
+                    </span>
+                    <div className="mb-4 flex justify-center">
+                      <UserProfile npub={user!.npub} showFull size="sm" />
+                    </div>
+                    {isSender ? (
+                      <p className="text-sm text-blue-800 dark:text-blue-200">
+                        You created this attestation
+                      </p>
+                    ) : isRecipient ? (
+                      <p className="text-sm text-green-800 dark:text-green-200">
+                        This attestation is addressed to you
+                      </p>
+                    ) : (
+                      <p className="text-sm text-gray-800 dark:text-gray-200">
+                        You are viewing this attestation
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Publish Attestation Card - Only show for verified attestations when user is the creator */}
+            {isVerificationRoute && isSender && currentData.verification.status === "verified" && (
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ExternalLink className="w-5 h-5" />
+                    Publish Attestation to Nostr
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                    <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-3">
+                      Share Your Verified Attestation
+                    </h4>
+                    <p className="text-sm text-blue-800 dark:text-blue-200 mb-4">
+                      Now that this attestation has been verified by the attestee, you can publish it to Nostr relays of your choice. 
+                    </p>
+                    <p className="text-sm text-blue-800 dark:text-blue-200 mb-4">
+                      This will create an Attestation event (<code className="bg-blue-100 dark:bg-blue-800 px-1 rounded text-xs">kind 18171</code>) for the verified Place.
+                    </p>
+                  </div>
+                  <Button 
+                    className="w-full" 
+                   
+                    disabled={true}
+                    onClick={() => {
+                      toast({
+                        title: "Coming Soon",
+                        description: "Nostr relay publishing is not yet implemented",
+                        variant: "default",
+                      });
+                    }}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Publish Attestation (Coming Soon)
+                  </Button>
+
+                </CardContent>
+              </Card>
+            )}
+
             {/* QR Code and Mailing Instructions - Only show on verification route and for sender */}
             {isVerificationRoute && isSender && (
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2 mb-6">
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <ExternalLink className="w-5 h-5" />
-                      Verification URL & QR Code
+                      Attestation URL & QR Code
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -449,7 +558,7 @@ export default function NoteViewer() {
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">
-                        Verification URL:
+                        Attestation URL:
                       </label>
                       <div className="mt-1 p-2 bg-muted rounded text-xs font-mono break-all">
                         {window.location.origin}/verification/
@@ -467,7 +576,7 @@ export default function NoteViewer() {
                             toast({
                               title: "Copied",
                               description:
-                                "Verification URL copied to clipboard",
+                                "Attestation URL copied to clipboard",
                             });
                           }}
                         >
@@ -475,14 +584,7 @@ export default function NoteViewer() {
                           Copy URL
                         </Button>
 
-                        {/* PDF Download for Pending Verifications */}
-                        {currentData.verification.status === "pending" && (
-                          <VerificationPDF
-                            verification={currentData.verification}
-                            note={currentData.note}
-                            verificationUrl={`${window.location.origin}/verification/${currentData.verification.id}`}
-                          />
-                        )}
+
                       </div>
                     </div>
                   </CardContent>
@@ -492,7 +594,7 @@ export default function NoteViewer() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Mail className="w-5 h-5" />
-                      Delivery & Mailing Instructions
+                      Mailing Instructions
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -521,7 +623,7 @@ export default function NoteViewer() {
                           <div className="flex items-center gap-2 mb-1">
                             <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                             <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                              Delivery Address:
+                               Address:
                             </span>
                           </div>
                           <pre className="text-sm text-blue-800 dark:text-blue-200 ml-6 whitespace-pre-wrap">
@@ -564,12 +666,26 @@ export default function NoteViewer() {
                         </div>
                       </div>
                     </div>
+
+                    {/* PDF Download - moved to bottom of mailing instructions */}
+                    <div className="pt-4 mt-4 border-t border-border">
+                      <h4 className="font-medium text-foreground mb-3">
+                        Download PDF for Mailing:
+                      </h4>
+                      <div className="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-lg border border-blue-200 dark:border-blue-700">
+                        <VerificationPDF
+                          verification={currentData.verification}
+                          note={currentData.note}
+                          verificationUrl={`${window.location.origin}/verification/${currentData.verification.id}`}
+                        />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
             )}
 
-            <div className="space-y-6">
+            <div className="space-y-6 mt-6">
               {/* Nostr Login Section */}
               {!isLoggedIn && hasNostrExtension() && (
                 <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
@@ -579,8 +695,7 @@ export default function NoteViewer() {
                         Connect Your Nostr Identity
                       </h3>
                       <p className="text-sm text-blue-800 dark:text-blue-200">
-                        Connect to check if this message is for you and decrypt
-                        it
+                        Connect to check if this attestation is related to you.
                       </p>
                     </div>
                     <Button onClick={handleNostrLogin} size="sm">
@@ -610,59 +725,7 @@ export default function NoteViewer() {
                 </div>
               )}
 
-              {/* User Status */}
-              {isLoggedIn && (
-                <div
-                  className={`border rounded-lg p-4 ${
-                    isSender
-                      ? "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700"
-                      : isRecipient
-                        ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700"
-                        : "bg-gray-50 dark:bg-gray-900/20 border-gray-200 dark:border-gray-700"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <User
-                      className={`w-5 h-5 ${
-                        isSender
-                          ? "text-blue-600 dark:text-blue-400"
-                          : isRecipient
-                            ? "text-green-600 dark:text-green-400"
-                            : "text-gray-600 dark:text-gray-400"
-                      }`}
-                    />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`font-medium ${
-                            isSender
-                              ? "text-blue-900 dark:text-blue-100"
-                              : isRecipient
-                                ? "text-green-900 dark:text-green-100"
-                                : "text-gray-900 dark:text-gray-100"
-                          }`}
-                        >
-                          Connected as
-                        </span>
-                        <UserProfile npub={user!.npub} showFull size="sm" />
-                      </div>
-                      {isSender ? (
-                        <p className="text-sm text-blue-800 dark:text-blue-200">
-                          You created this verification
-                        </p>
-                      ) : isRecipient ? (
-                        <p className="text-sm text-green-800 dark:text-green-200">
-                          This verification is addressed to you
-                        </p>
-                      ) : (
-                        <p className="text-sm text-gray-800 dark:text-gray-200">
-                          You are viewing this verification
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
+
 
               {/* Decrypted Content */}
               {decryptedContent && (
@@ -695,17 +758,18 @@ export default function NoteViewer() {
 
               {/* Extension Decryption Section */}
               {isRecipient && !decryptedContent && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-lg p-6">
-                  <div className="flex items-center gap-2 mb-4">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-lg p-6 text-center">
+                  <div className="flex items-center gap-2 mb-4 justify-center">
                     <Lock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     <h3 className="font-medium text-blue-900 dark:text-blue-100">
-                      Decrypt Message
+                      Decrypt Verification Message
                     </h3>
                   </div>
                   <div className="space-y-4">
                     <p className="text-sm text-blue-800 dark:text-blue-200">
-                      This message is encrypted for you. Click the button below
-                      to decrypt it with your Nostr extension.
+                      The verification token to complete your Proof-of-Place Attestation is encrypted inside this note.
+                      <div></div>
+                      Click the button below to decrypt it with your Nostr extension.
                     </p>
                     <Button
                       onClick={attemptDecryption}
@@ -725,88 +789,23 @@ export default function NoteViewer() {
                       )}
                     </Button>
                     <p className="text-xs text-blue-600 dark:text-blue-300">
-                      Your Nostr extension will prompt you to decrypt this
-                      message using your private key.
+                      Your Nostr extension will prompt you to decrypt this message using your private key.
                     </p>
                   </div>
                 </div>
               )}
 
-              <div className="bg-muted rounded-lg p-4">
-                <h3 className="font-medium text-foreground mb-3">
-                  Note Information
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Recipient:</span>
-                    <UserProfile
-                      npub={currentData.verification.recipientNpub}
-                      showFull
-                      size="sm"
-                    />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Sender:</span>
-                    <UserProfile
-                      npub={senderNpubForProfile || ""}
-                      showFull
-                      size="sm"
-                    />
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Created:</span>
-                    <span className="text-foreground">
-                      {new Date(
-                        currentData.verification.createdAt,
-                      ).toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Status:</span>
-                    <span
-                      className={`capitalize ${currentData.verification.status === "verified" ? "text-green-600 dark:text-green-400" : "text-yellow-600 dark:text-yellow-400"}`}
-                    >
-                      {currentData.verification.status}
-                    </span>
-                  </div>
-                </div>
-              </div>
 
-              <div className="bg-muted rounded-lg p-4">
-                <h3 className="font-medium text-foreground mb-3">
-                  Nostr Event JSON
-                </h3>
-                <div className="bg-card rounded border border-border p-3 max-h-48 overflow-y-auto">
-                  <pre className="text-xs font-mono text-foreground whitespace-pre-wrap">
-                    {currentData.note.nostrEvent}
-                  </pre>
-                </div>
-                <div className="flex gap-2 mt-3">
-                  <Button size="sm" variant="outline" onClick={handleCopyEvent}>
-                    <Copy className="w-4 h-4 mr-1" />
-                    Copy JSON
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleDownloadEvent}
-                  >
-                    <Download className="w-4 h-4 mr-1" />
-                    Download
-                  </Button>
-                </div>
-              </div>
 
-              {!decryptedContent && (
+              {!decryptedContent && isRecipient && !isSender && (
                 <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
                   <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
                     Alternative: Manual Import
                   </h3>
                   <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                    <li>1. Copy the JSON event above</li>
+                    <li>1. Copy the JSON event below</li>
                     <li>
-                      2. Import it into your Nostr client (Amethyst, Primal,
-                      etc.)
+                      2. Import it into your Nostr client (Amethyst, Primal, etc.)
                     </li>
                     <li>3. Decrypt the message using your private key</li>
                     <li>
@@ -816,11 +815,34 @@ export default function NoteViewer() {
                 </div>
               )}
 
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={() => navigate("/")}>
-                  Create New Note
-                </Button>
-              </div>
+              {/* Nostr Event JSON - only show for recipients, not senders, and only if content hasn't been decrypted */}
+              {isRecipient && !isSender && !decryptedContent && (
+                <div className="bg-muted rounded-lg p-4">
+                  <h3 className="font-medium text-foreground mb-3">
+                    Nostr Event JSON
+                  </h3>
+                  <div className="bg-card rounded border border-border p-3 max-h-48 overflow-y-auto">
+                    <pre className="text-xs font-mono text-foreground whitespace-pre-wrap">
+                      {currentData.note.nostrEvent}
+                    </pre>
+                  </div>
+                  <div className="flex gap-2 mt-3">
+                    <Button size="sm" variant="outline" onClick={handleCopyEvent}>
+                      <Copy className="w-4 h-4 mr-1" />
+                      Copy JSON
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={handleDownloadEvent}
+                    >
+                      <Download className="w-4 h-4 mr-1" />
+                      Download
+                    </Button>
+                  </div>
+                </div>
+              )}
+
             </div>
           </CardContent>
         </Card>

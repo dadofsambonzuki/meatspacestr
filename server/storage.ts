@@ -1,7 +1,7 @@
 import { verifications, notes, type Verification, type Note, type InsertVerification, type InsertNote } from "@shared/schema";
 import { nanoid } from "nanoid";
 import { nip19, verifyEvent } from "nostr-tools";
-import { eq, and, desc, isNull } from "drizzle-orm";
+import { eq, and, or, desc, isNull } from "drizzle-orm";
 import { db } from "./db";
 
 // No server-side encryption or signing - everything handled by client browser extension
@@ -98,13 +98,32 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(verifications.createdAt));
   }
 
-  async getPendingVerificationsByCreator(creatorNpub: string): Promise<Verification[]> {
-    // For now, return all pending verifications since we don't track creators yet
-    // TODO: Add creator tracking to verifications table if needed
+  async getPendingVerificationsByCreator(userNpub: string): Promise<Verification[]> {
+    // Get pending verifications where user is either the recipient or the sender (creator)
     const result = await db
-      .select()
+      .select({
+        id: verifications.id,
+        recipientNpub: verifications.recipientNpub,
+        merchantName: verifications.merchantName,
+        merchantAddress: verifications.merchantAddress,
+        customMessage: verifications.customMessage,
+        token: verifications.token,
+        status: verifications.status,
+        createdAt: verifications.createdAt,
+        verifiedAt: verifications.verifiedAt,
+      })
       .from(verifications)
-      .where(eq(verifications.status, "pending"))
+      .leftJoin(notes, eq(notes.verificationId, verifications.id))
+      .where(
+        and(
+          eq(verifications.status, "pending"),
+          // User is either the recipient or the sender
+          or(
+            eq(verifications.recipientNpub, userNpub),
+            eq(notes.senderNpub, userNpub)
+          )
+        )
+      )
       .orderBy(desc(verifications.createdAt));
     
     return result;

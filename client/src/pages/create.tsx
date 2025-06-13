@@ -121,8 +121,8 @@ export default function CreatePage() {
       }
       
       toast({
-        title: "Verification created successfully",
-        description: "Redirecting to verification page...",
+        title: "Attestation created successfully",
+        description: "Redirecting to attestation page...",
       });
       
       // Navigate to the verification page
@@ -130,7 +130,7 @@ export default function CreatePage() {
     },
     onError: (error) => {
       toast({
-        title: "Failed to create verification",
+        title: "Failed to create attestation",
         description: error instanceof Error ? error.message : "An unexpected error occurred",
         variant: "destructive",
       });
@@ -146,18 +146,30 @@ export default function CreatePage() {
       <Navigation />
       <div className="container mx-auto py-8 space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground">Create Verification Note</h1>
-          <p className="text-muted-foreground mt-2">
-            Create an encrypted note with verification URL for identity verification
-          </p>
+          <h1 className="text-3xl font-bold text-foreground mb-6">Create Attestation</h1>
+        </div>
+
+        <div className="max-w-2xl mx-auto mb-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="space-y-4 text-center">
+                <p className="text-foreground">
+                  Creating a Proof-of-Place Attestation will generate a unique verification URL that you will physically mail to the Attestee.
+                </p>
+                <p className="text-foreground">
+                  We will guide them through unlocking their encrypted verification token, which will verify the link between their Nostr identity and their physical address. Once this is complete the Attestation will be marked as verified and publicly viewable.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="flex justify-center">
           <Card className="w-full max-w-2xl">
             <CardHeader>
-              <CardTitle>Create New Verification</CardTitle>
+              <CardTitle>Create New Attestation</CardTitle>
               <CardDescription>
-                Fill in the details to create an encrypted verification note
+                Fill in the details manuall for now. This will be automated in the future by importing a Place event from a Nostr relay.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -168,7 +180,7 @@ export default function CreatePage() {
                     name="recipientNpub"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Recipient Npub *</FormLabel>
+                        <FormLabel>Merchant Npub *</FormLabel>
                         <FormControl>
                           <Input {...field} placeholder="npub1..." />
                         </FormControl>
@@ -222,7 +234,7 @@ export default function CreatePage() {
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            placeholder="Enter any additional message or instructions..."
+                            placeholder="Additional personal message. Pura vida!"
                             className="min-h-[80px] resize-none"
                             rows={3}
                           />
@@ -237,7 +249,7 @@ export default function CreatePage() {
                     className="w-full" 
                     disabled={createVerificationMutation.isPending}
                   >
-                    {createVerificationMutation.isPending ? "Creating..." : "Create Encrypted Verification"}
+                    {createVerificationMutation.isPending ? "Creating..." : "Create Attestation"}
                   </Button>
                 </form>
               </Form>

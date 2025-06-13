@@ -29,7 +29,7 @@ export default function VerifyPage() {
     if (!verificationToken.trim()) {
       toast({
         title: "Token Required",
-        description: "Please enter a verification token.",
+        description: "Please enter an attestation token.",
         variant: "destructive",
       });
       return;
@@ -48,19 +48,19 @@ export default function VerifyPage() {
       if (response.ok) {
         setVerificationResult(result);
         toast({
-          title: "Verification Successful", 
+          title: "Attestation Successful", 
           description: "The link between your physical address in meatspace and your npub in cyberspace has been verified!",
         });
       } else {
         toast({
-          title: "Verification Failed",
-          description: result.message || "Verification failed",
+          title: "Attestation Failed",
+          description: result.message || "Attestation failed",
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        title: "Verification Failed",
+        title: "Attestation Failed",
         description: "Network error occurred",
         variant: "destructive",
       });
@@ -80,24 +80,22 @@ export default function VerifyPage() {
       <div className="flex items-center justify-center p-4 pt-16">
         <Card className="w-full max-w-md">
           <CardHeader>
-          <CardTitle>Proof of Place Verification</CardTitle>
+          <CardTitle>Verify Attestation</CardTitle>
           <CardDescription>
-            Enter your verification token to complete the Proof of Place.
+            Enter your verification token below to verify your Proof of Place Attestation.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {!verificationResult && (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="token" className="block text-sm font-medium text-foreground mb-2">
-                  Verification Token
-                </label>
+
                 <Input
                   id="token"
                   type="text"
                   value={token}
                   onChange={(e) => setToken(e.target.value)}
-                  placeholder="Enter verification token..."
+                  placeholder="Enter attestation token..."
                   className="w-full"
                 />
               </div>
@@ -112,7 +110,7 @@ export default function VerifyPage() {
                     Verifying...
                   </>
                 ) : (
-                  "Verify Proof of Place"
+                  "Verify"
                 )}
               </Button>
             </form>
@@ -146,16 +144,6 @@ export default function VerifyPage() {
                 </div>
               )}
 
-              <Button 
-                onClick={() => {
-                  setVerificationResult(null);
-                  setToken('');
-                }}
-                variant="outline"
-                className="w-full"
-              >
-                Verify Another Token
-              </Button>
             </div>
           )}
         </CardContent>

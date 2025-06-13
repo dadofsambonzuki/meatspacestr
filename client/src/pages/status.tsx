@@ -109,32 +109,29 @@ export default function StatusPage() {
       <Navigation />
       <div className="container mx-auto py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Verification Status</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Attestations</h1>
           <p className="text-muted-foreground">
-            View verification notes and their current status
+            View attestations and their current status.
           </p>
         </div>
 
-        {/* User's Pending Verifications (if logged in) */}
+        {/* User's Pending Attestations (if logged in) */}
         {user ? (
           <div className="mb-12 bg-card rounded-lg p-6 shadow-sm border border-border">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-foreground">Your Pending Verifications</h2>
-              <Link href="/create">
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create New
-                </Button>
-              </Link>
+              <h2 className="text-2xl font-bold text-foreground">Your Pending Attestations</h2>
             </div>
 
             {pendingLoading ? (
-              <p className="text-center text-muted-foreground">Loading your pending verifications...</p>
+              <p className="text-center text-muted-foreground">Loading your pending attestations...</p>
             ) : sortedPendingVerifications.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">You have no pending verifications.</p>
+                <p className="text-muted-foreground mb-4">You have no pending attestations.</p>
                 <Link href="/create">
-                  <Button>Create Your First Verification</Button>
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create New
+                  </Button>
                 </Link>
               </div>
             ) : (
@@ -143,7 +140,7 @@ export default function StatusPage() {
                   <Card key={verification.id} className="hover:shadow-md transition-shadow">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Verification #{verification.id}</CardTitle>
+                        <CardTitle className="text-lg">Attestation #{verification.id}</CardTitle>
                         <div className="flex items-center gap-2">
                           <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
                             Pending
@@ -198,8 +195,8 @@ export default function StatusPage() {
         ) : (
           <div className="mb-12 bg-card rounded-lg p-6 shadow-sm border border-border">
             <div className="text-center py-8">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Your Pending Verifications</h2>
-              <p className="text-muted-foreground mb-6">Login with your Nostr extension to view your pending verifications</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Your Pending Attestations</h2>
+              <p className="text-muted-foreground mb-6">Login with your Nostr extension to view your pending attestations</p>
               <Button onClick={handleLogin} disabled={authLoading} className="bg-purple-600 hover:bg-purple-700">
                 <LogIn className="h-4 w-4 mr-2" />
                 {authLoading ? "Connecting..." : "Login with Nostr"}
@@ -210,16 +207,16 @@ export default function StatusPage() {
 
         {/* Public Verified Notes */}
         <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
-          <h2 className="text-2xl font-bold text-foreground mb-6">All Verified Notes</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">All Verified Attestations</h2>
 
           {verifiedLoading ? (
-            <p className="text-center text-muted-foreground">Loading verified notes...</p>
+            <p className="text-center text-muted-foreground">Loading verified attestations...</p>
           ) : sortedVerifiedVerifications.length === 0 ? (
             <div className="text-center py-8">
               <CheckCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">No verified notes yet. Be the first to create one!</p>
+              <p className="text-muted-foreground mb-4">No verified attestations yet. Be the first to create one!</p>
               <Link href="/create">
-                <Button>Create First Verification</Button>
+                <Button>Create First Attestation</Button>
               </Link>
             </div>
           ) : (
@@ -228,7 +225,7 @@ export default function StatusPage() {
                 <Card key={verification.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Verification #{verification.id}</CardTitle>
+                      <CardTitle className="text-lg">Attestation #{verification.id}</CardTitle>
                       <div className="flex items-center gap-2">
                         <Badge variant="default" className="bg-green-100 text-green-800">
                           Verified

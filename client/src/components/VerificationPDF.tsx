@@ -94,7 +94,7 @@ export function VerificationPDF({
       htmlContent += `
           <div style="text-align: center; margin-bottom: 20px;">
             <p style="color: #666; font-size: 14px; max-width: 600px; margin: 0 auto; line-height: 1.4;">
-              Please scan the QR below to unlock your verification request. This will enable the attestor (${senderDisplayName}) to attest to a link between your Nostr identity in cyberspace and your physical address in meatspace.
+              Please scan the QR below to unlock your attestation request. This will enable the attestor (${senderDisplayName}) to attest to a link between your Nostr identity in cyberspace and your physical address in meatspace.
             </p>
           </div>
           
@@ -253,7 +253,7 @@ export function VerificationPDF({
       document.body.removeChild(pdfContainer);
 
       // Download the PDF
-      pdf.save(`verification-${verification.id}.pdf`);
+      pdf.save(`attestation-${verification.id}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Failed to generate PDF. Please try again.");
@@ -267,10 +267,10 @@ export function VerificationPDF({
         <div className="bg-white p-8 font-sans">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Proof of Place Verification
+              Proof of Place Attestation
             </h1>
             <p className="text-gray-600">
-              Nostr-based verification of Proof of Place
+              Nostr-based attestation of Proof of Place
             </p>
           </div>
 
