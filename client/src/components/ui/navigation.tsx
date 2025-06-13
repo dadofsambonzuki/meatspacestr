@@ -19,7 +19,7 @@ export function Navigation() {
 
   const navItems = [
     { path: "/create", label: "Create", icon: Plus },
-    { path: "/status", label: "Status", icon: List },
+    { path: "/status", label: "View", icon: List },
     { path: "/verify", label: "Verify", icon: Search },
   ];
 

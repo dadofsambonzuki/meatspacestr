@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <OGImageGenerator 
-        title="Proof-of-Place: Physical Address Verification over Nostr"
+        title="Proof-of-Place Attestations over Nostr"
         description="Cryptographically verify that a Nostr identity in cyberspace has access to a physical address in meatspace"
         brandName="meatspacestr"
       />
@@ -24,12 +24,13 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="font-bold text-foreground mb-6 text-[44px]">
-            Proof-of-Place: Physical Address Verification over Nostr
+            Proof-of-Place Attestations over Nostr
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             Cryptographically verify that a Nostr identity in{" "}
-            <span className="font-semibold text-blue-600">cyberspace</span> has
-            access to a physical address in{" "}
+            <span className="font-semibold text-blue-600">cyberspace</span>
+            <div></div>
+            has access to a physical address in{" "}
             <span className="font-semibold text-orange-600">meatspace</span>.
           </p>
         </div>
@@ -41,15 +42,15 @@ export default function Home() {
               <div className="mx-auto mb-4 p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full w-fit">
                 <Plus className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <CardTitle className="text-2xl">Create Verification</CardTitle>
+              <CardTitle className="text-2xl">Create Attestations</CardTitle>
               <CardDescription className="text-lg">
-                Generate encrypted verification notes
+                Generate encrypted verification tokens
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-auto">
               <Link href="/create">
                 <Button size="lg" className="w-full">
-                  Create New Note
+                  Create
                 </Button>
               </Link>
             </CardContent>
@@ -60,15 +61,15 @@ export default function Home() {
               <div className="mx-auto mb-4 p-3 bg-orange-100 dark:bg-orange-900/20 rounded-full w-fit">
                 <List className="h-8 w-8 text-orange-600 dark:text-orange-400" />
               </div>
-              <CardTitle className="text-2xl">View Verifications</CardTitle>
+              <CardTitle className="text-2xl">View Attestations</CardTitle>
               <CardDescription className="text-lg">
-                View verification notes and their current status
+                View attestations and their current statuses
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-auto">
               <Link href="/status">
                 <Button size="lg" className="w-full">
-                  View Status
+                  View
                 </Button>
               </Link>
             </CardContent>
@@ -81,13 +82,13 @@ export default function Home() {
               </div>
               <CardTitle className="text-2xl">Complete Verification</CardTitle>
               <CardDescription className="text-lg">
-                Use tokens from verification notes to verify identity
+                Use tokens to completer verification
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-auto">
               <Link href="/verify">
                 <Button size="lg" className="w-full">
-                  Verify Identity
+                  Verify
                 </Button>
               </Link>
             </CardContent>
@@ -111,7 +112,7 @@ export default function Home() {
                   1. Sign & Encrypt
                 </h3>
                 <p className="text-muted-foreground">
-                  Verifier creates a Nostr event with encrypted content
+                  Attestor creates a Nostr event with encrypted content
                   containing a verification token.
                 </p>
               </div>
@@ -123,8 +124,8 @@ export default function Home() {
                   2. Mail Encrypted Note
                 </h3>
                 <p className="text-muted-foreground">
-                  Verifier physically mails the QR code URL directing the
-                  verifyee to the encrypted note on meatspacestr.
+                  Attestor physically mails the QR code URL directing the
+                  attestee to the encrypted note.
                 </p>
               </div>
               <div className="text-center">
@@ -132,10 +133,10 @@ export default function Home() {
                   <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
                 </div>
                 <h3 className="font-semibold mb-2 text-foreground">
-                  3. Complete Verification
+                  3. Complete Attestation
                 </h3>
                 <p className="text-muted-foreground">
-                  Verifyee decrypts the message and uses the verification token
+                  Attestee decrypts the message and uses the verification token
                   to complete Proof-of-Place.
                 </p>
               </div>
