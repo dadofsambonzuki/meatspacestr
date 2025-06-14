@@ -169,7 +169,7 @@ export default function CreatePage() {
             <CardHeader>
               <CardTitle>Create New Attestation</CardTitle>
               <CardDescription>
-                Fill in the details manuall for now. This will be automated in the future by importing a Place event from a Nostr relay.
+                Fill in the details manually for now. This will be automated in the future by importing a Place event from a Nostr relay.
               </CardDescription>
             </CardHeader>
             <CardContent>
