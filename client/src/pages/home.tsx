@@ -20,34 +20,34 @@ export default function Home() {
         brandName="meatspacestr"
       />
       <Navigation />
-      <div className="max-w-4xl mx-auto px-4 py-16">
+      <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="font-bold text-foreground mb-6 text-[44px]">
+          <h1 className="font-bold text-foreground mb-6 text-2xl md:text-3xl lg:text-[44px] leading-tight">
             Proof-of-Place Attestations over Nostr
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             Cryptographically verify that a Nostr identity in{" "}
             <span className="font-semibold text-blue-600">cyberspace</span>
-            <div></div>
+            <br className="hidden sm:block" />
             has access to a physical address in{" "}
             <span className="font-semibold text-orange-600">meatspace</span>.
           </p>
         </div>
 
         {/* Feature Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <Card className="p-8 text-center hover:shadow-lg transition-shadow flex flex-col h-full">
-            <CardHeader className="flex-grow">
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-16">
+          <Card className="p-6 md:p-8 text-center hover:shadow-lg transition-shadow flex flex-col h-full">
+            <CardHeader className="flex-grow px-0 md:px-6">
               <div className="mx-auto mb-4 p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full w-fit">
-                <Plus className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <Plus className="h-6 md:h-8 w-6 md:w-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <CardTitle className="text-2xl">Create Attestations</CardTitle>
-              <CardDescription className="text-lg">
+              <CardTitle className="text-xl md:text-2xl">Create Attestations</CardTitle>
+              <CardDescription className="text-base md:text-lg">
                 Generate encrypted attestation tokens
               </CardDescription>
             </CardHeader>
-            <CardContent className="mt-auto">
+            <CardContent className="mt-auto px-0 md:px-6">
               <Link href="/create">
                 <Button size="lg" className="w-full">
                   Create
@@ -56,17 +56,17 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <Card className="p-8 text-center hover:shadow-lg transition-shadow flex flex-col h-full">
-            <CardHeader className="flex-grow">
+          <Card className="p-6 md:p-8 text-center hover:shadow-lg transition-shadow flex flex-col h-full">
+            <CardHeader className="flex-grow px-0 md:px-6">
               <div className="mx-auto mb-4 p-3 bg-orange-100 dark:bg-orange-900/20 rounded-full w-fit">
-                <List className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                <List className="h-6 md:h-8 w-6 md:w-8 text-orange-600 dark:text-orange-400" />
               </div>
-              <CardTitle className="text-2xl">View Attestations</CardTitle>
-              <CardDescription className="text-lg">
+              <CardTitle className="text-xl md:text-2xl">View Attestations</CardTitle>
+              <CardDescription className="text-base md:text-lg">
                 View attestations and their current statuses
               </CardDescription>
             </CardHeader>
-            <CardContent className="mt-auto">
+            <CardContent className="mt-auto px-0 md:px-6">
               <Link href="/status">
                 <Button size="lg" className="w-full">
                   View
@@ -75,17 +75,17 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <Card className="p-8 text-center hover:shadow-lg transition-shadow flex flex-col h-full">
-            <CardHeader className="flex-grow">
+          <Card className="p-6 md:p-8 text-center hover:shadow-lg transition-shadow flex flex-col h-full">
+            <CardHeader className="flex-grow px-0 md:px-6">
               <div className="mx-auto mb-4 p-3 bg-green-100 dark:bg-green-900/20 rounded-full w-fit">
-                <Search className="h-8 w-8 text-green-600 dark:text-green-400" />
+                <Search className="h-6 md:h-8 w-6 md:w-8 text-green-600 dark:text-green-400" />
               </div>
-              <CardTitle className="text-2xl">Complete Attestation</CardTitle>
-              <CardDescription className="text-lg">
+              <CardTitle className="text-xl md:text-2xl">Complete Attestation</CardTitle>
+              <CardDescription className="text-base md:text-lg">
                 Use tokens to complete attestation
               </CardDescription>
             </CardHeader>
-            <CardContent className="mt-auto">
+            <CardContent className="mt-auto px-0 md:px-6">
               <Link href="/verify">
                 <Button size="lg" className="w-full">
                   Verify

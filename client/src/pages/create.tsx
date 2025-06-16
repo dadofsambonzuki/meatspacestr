@@ -144,19 +144,19 @@ export default function CreatePage() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <div className="container mx-auto py-8 space-y-8">
+      <div className="container mx-auto py-8 px-4 space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-6">Create Attestation</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-6">Create Attestation</h1>
         </div>
 
         <div className="max-w-2xl mx-auto mb-6">
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="pt-6 px-4 md:px-6">
               <div className="space-y-4 text-center">
-                <p className="text-foreground">
+                <p className="text-foreground text-sm md:text-base">
                   Creating a Proof-of-Place Attestation will generate a unique verification URL that you will physically mail to the Attestee.
                 </p>
-                <p className="text-foreground">
+                <p className="text-foreground text-sm md:text-base">
                   We will guide them through unlocking their encrypted verification token, which will verify the link between their Nostr identity and their physical address. Once this is complete the Attestation will be marked as verified and publicly viewable.
                 </p>
               </div>
@@ -166,13 +166,13 @@ export default function CreatePage() {
 
         <div className="flex justify-center">
           <Card className="w-full max-w-2xl">
-            <CardHeader>
-              <CardTitle>Create New Attestation</CardTitle>
-              <CardDescription>
+            <CardHeader className="px-4 md:px-6">
+              <CardTitle className="text-lg md:text-xl">Create New Attestation</CardTitle>
+              <CardDescription className="text-sm md:text-base">
                 Fill in the details manually for now. This will be automated in the future by importing a Place event from a Nostr relay.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 md:px-6">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField

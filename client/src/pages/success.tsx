@@ -11,15 +11,15 @@ export default function SuccessPage() {
       <Navigation />
       <div className="flex items-center justify-center p-4 pt-16">
         <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
+          <CardHeader className="text-center px-4 md:px-6">
             <div className="mx-auto mb-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-full w-fit">
-              <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+              <CheckCircle className="h-6 md:h-8 w-6 md:w-8 text-green-600 dark:text-green-400" />
             </div>
-            <CardTitle className="text-2xl text-green-900 dark:text-green-100">Verification Complete!</CardTitle>
+            <CardTitle className="text-xl md:text-2xl text-green-900 dark:text-green-100">Verification Complete!</CardTitle>
           </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4">
-              <p className="text-green-800 dark:text-green-200">
+          <CardContent className="text-center space-y-4 px-4 md:px-6">
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-3 md:p-4">
+              <p className="text-sm md:text-base text-green-800 dark:text-green-200">
                 Your nostr identity in cyberspace has been successfully linked to your physical address in meatspace!
               </p>
             </div>

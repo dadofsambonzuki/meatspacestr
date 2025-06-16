@@ -107,9 +107,9 @@ export default function StatusPage() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Attestations</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Attestations</h1>
           <p className="text-muted-foreground">
             View attestations and their current status.
           </p>
@@ -117,9 +117,9 @@ export default function StatusPage() {
 
         {/* User's Pending Attestations (if logged in) */}
         {user ? (
-          <div className="mb-12 bg-card rounded-lg p-6 shadow-sm border border-border">
+          <div className="mb-12 bg-card rounded-lg p-4 md:p-6 shadow-sm border border-border">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-foreground">Your Pending Attestations</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-foreground">Your Pending Attestations</h2>
             </div>
 
             {pendingLoading ? (
@@ -137,55 +137,61 @@ export default function StatusPage() {
             ) : (
               <div className="grid gap-4">
                 {sortedPendingVerifications.map((verification) => (
-                  <Card key={verification.id} className="hover:shadow-md transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Attestation #{verification.id}</CardTitle>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                  <Card key={verification.id} className="hover:shadow-md transition-shadow overflow-hidden">
+                    <CardHeader className="pb-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <CardTitle className="text-base md:text-lg truncate">Attestation #{verification.id}</CardTitle>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
                             Pending
                           </Badge>
                           <Link href={`/verification/${verification.id}`}>
                             <Button
                               variant="outline"
                               size="sm"
+                              className="text-xs"
                             >
-                              <Eye className="h-4 w-4 mr-1" />
+                              <Eye className="h-3 w-3 mr-1" />
                               View
                             </Button>
                           </Link>
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          <span className="text-muted-foreground">To:</span>
-                          <UserProfile npub={verification.recipientNpub} showFull size="sm" />
+                    <CardContent className="pt-0 overflow-hidden">
+                      <div className="space-y-2 text-xs md:text-sm">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-muted-foreground text-xs">To:</span>
+                          <div className="min-w-0 overflow-hidden pl-2">
+                            <UserProfile npub={verification.recipientNpub} showFull size="sm" />
+                          </div>
                         </div>
                         {verification.merchantName && (
-                          <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-muted-foreground">Merchant:</span>
-                            <span className="font-medium text-foreground">{verification.merchantName}</span>
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2">
+                              <Building className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                              <span className="text-muted-foreground text-xs">Merchant:</span>
+                            </div>
+                            <span className="font-medium text-foreground break-words pl-2 text-xs md:text-sm">{verification.merchantName}</span>
                           </div>
                         )}
                         {verification.merchantAddress && (
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-muted-foreground">Address:</span>
-                            <span className="font-medium text-foreground">{verification.merchantAddress}</span>
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2">
+                              <MapPin className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                              <span className="text-muted-foreground text-xs">Address:</span>
+                            </div>
+                            <span className="font-medium text-foreground break-words pl-2 text-xs md:text-sm">{verification.merchantAddress}</span>
                           </div>
                         )}
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-muted-foreground">Created:</span>
-                          <span className="font-medium text-foreground">{new Date(verification.createdAt).toLocaleDateString()}</span>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                            <span className="text-muted-foreground text-xs">Created:</span>
+                          </div>
+                          <span className="font-medium text-foreground pl-2 text-xs md:text-sm">{new Date(verification.createdAt).toLocaleDateString()}</span>
                         </div>
                       </div>
-
-
-
                     </CardContent>
                   </Card>
                 ))}
@@ -193,9 +199,9 @@ export default function StatusPage() {
             )}
           </div>
         ) : (
-          <div className="mb-12 bg-card rounded-lg p-6 shadow-sm border border-border">
+          <div className="mb-12 bg-card rounded-lg p-4 md:p-6 shadow-sm border border-border">
             <div className="text-center py-8">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Your Pending Attestations</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-4">Your Pending Attestations</h2>
               <p className="text-muted-foreground mb-6">Login with your Nostr extension to view your pending attestations</p>
               <Button onClick={handleLogin} disabled={authLoading} className="bg-purple-600 hover:bg-purple-700">
                 <LogIn className="h-4 w-4 mr-2" />
@@ -206,8 +212,8 @@ export default function StatusPage() {
         )}
 
         {/* Public Verified Notes */}
-        <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
-          <h2 className="text-2xl font-bold text-foreground mb-6">All Verified Attestations</h2>
+        <div className="bg-card rounded-lg p-4 md:p-6 shadow-sm border border-border">
+          <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6">All Verified Attestations</h2>
 
           {verifiedLoading ? (
             <p className="text-center text-muted-foreground">Loading verified attestations...</p>
@@ -222,59 +228,67 @@ export default function StatusPage() {
           ) : (
             <div className="grid gap-4">
               {sortedVerifiedVerifications.map(({ verification, senderNpub }) => (
-                <Card key={verification.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Attestation #{verification.id}</CardTitle>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="default" className="bg-green-100 text-green-800">
+                <Card key={verification.id} className="hover:shadow-md transition-shadow overflow-hidden">
+                  <CardHeader className="pb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <CardTitle className="text-base md:text-lg truncate">Attestation #{verification.id}</CardTitle>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <Badge variant="default" className="bg-green-100 text-green-800 text-xs">
                           Verified
                         </Badge>
                         <Link href={`/verification/${verification.id}`}>
                           <Button
                             variant="outline"
                             size="sm"
+                            className="text-xs"
                           >
-                            <Eye className="h-4 w-4 mr-1" />
+                            <Eye className="h-3 w-3 mr-1" />
                             View
                           </Button>
                         </Link>
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                      <div className="space-y-2">
-                        {senderNpub && (
-                          <div className="flex items-center">
-                            <span className="text-muted-foreground w-12">From:</span>
+                  <CardContent className="pt-0 overflow-hidden">
+                    <div className="space-y-2 text-xs md:text-sm">
+                      {senderNpub && (
+                        <div className="flex flex-col gap-1">
+                          <span className="text-muted-foreground text-xs">From:</span>
+                          <div className="min-w-0 overflow-hidden pl-2">
                             <UserProfile npub={senderNpub} showFull size="sm" />
                           </div>
-                        )}
-                        <div className="flex items-center">
-                          <span className="text-muted-foreground w-12">To:</span>
+                        </div>
+                      )}
+                      <div className="flex flex-col gap-1">
+                        <span className="text-muted-foreground text-xs">To:</span>
+                        <div className="min-w-0 overflow-hidden pl-2">
                           <UserProfile npub={verification.recipientNpub} showFull size="sm" />
                         </div>
                       </div>
                       {verification.merchantName && (
-                        <div className="flex items-center gap-2">
-                          <Building className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-muted-foreground">Merchant:</span>
-                          <span className="font-medium text-foreground">{verification.merchantName}</span>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2">
+                            <Building className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                            <span className="text-muted-foreground text-xs">Merchant:</span>
+                          </div>
+                          <span className="font-medium text-foreground break-words pl-2 text-xs md:text-sm">{verification.merchantName}</span>
                         </div>
                       )}
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">Verified:</span>
-                        <span className="font-medium text-foreground">{verification.verifiedAt ? new Date(verification.verifiedAt).toLocaleDateString() : 'N/A'}</span>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                          <span className="text-muted-foreground text-xs">Verified:</span>
+                        </div>
+                        <span className="font-medium text-foreground pl-2 text-xs md:text-sm">{verification.verifiedAt ? new Date(verification.verifiedAt).toLocaleDateString() : 'N/A'}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">Created:</span>
-                        <span className="font-medium text-foreground">{new Date(verification.createdAt).toLocaleDateString()}</span>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                          <span className="text-muted-foreground text-xs">Created:</span>
+                        </div>
+                        <span className="font-medium text-foreground pl-2 text-xs md:text-sm">{new Date(verification.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
-
                   </CardContent>
                 </Card>
               ))}

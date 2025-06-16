@@ -308,11 +308,11 @@ export default function NoteViewer() {
         <Navigation />
         <div className="max-w-4xl mx-auto px-4 py-16">
           <Card className="max-w-md mx-auto">
-            <CardContent className="text-center p-8">
-              <h1 className="text-xl font-bold text-foreground mb-2">
+            <CardContent className="text-center p-6 md:p-8">
+              <h1 className="text-lg md:text-xl font-bold text-foreground mb-2">
                 Attestation Not Found
               </h1>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-sm md:text-base text-muted-foreground mb-4">
                 The attestation you're looking for doesn't exist or has been
                 removed.
               </p>
@@ -347,45 +347,47 @@ export default function NoteViewer() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <div className="max-w-4xl mx-auto px-4 py-16">
+      <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
         <Card className="mb-6">
-          <CardContent className="p-8">
+          <CardContent className="p-4 md:p-8">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-foreground mb-2">
+              <h1 className="text-xl md:text-2xl font-bold text-foreground mb-2">
                 {isVerificationRoute
                   ? "Identity Attestation"
                   : "Encrypted Nostr Note"}
               </h1>
-              <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                <span>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-muted-foreground">
+                <span className="text-sm md:text-base">
                   {isVerificationRoute
                     ? "Attestation request for"
                     : "This note is encrypted for"}
                 </span>
-                <UserProfile
-                  npub={currentData.verification.recipientNpub}
-                  showFull
-                  size="sm"
-                />
+                <div className="min-w-0">
+                  <UserProfile
+                    npub={currentData.verification.recipientNpub}
+                    showFull
+                    size="sm"
+                  />
+                </div>
               </div>
             </div>
 
             {/* Verification Metadata Section */}
             {isVerificationRoute && (
-              <div className="bg-muted rounded-lg p-6 mb-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">
+              <div className="bg-muted rounded-lg p-4 md:p-6 mb-6">
+                <h2 className="text-base md:text-lg font-semibold text-foreground mb-4">
                   Attestation Details
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex justify-between">
+                <div className="space-y-3 text-sm">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                     <span className="text-muted-foreground">
                       Attestation ID:
                     </span>
-                    <span className="font-mono text-foreground">
+                    <span className="font-mono text-foreground break-all">
                       {currentData.verification.id}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                     <span className="text-muted-foreground">Status:</span>
                     <Badge
                       variant={
@@ -398,30 +400,32 @@ export default function NoteViewer() {
                     </Badge>
                   </div>
                   {currentData.verification.merchantName && (
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                       <span className="text-muted-foreground">Merchant:</span>
-                      <span className="text-foreground">
+                      <span className="text-foreground break-words">
                         {currentData.verification.merchantName}
                       </span>
                     </div>
                   )}
                   {currentData.verification.merchantAddress && (
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                       <span className="text-muted-foreground">Address:</span>
-                      <span className="text-foreground">
+                      <span className="text-foreground break-words">
                         {currentData.verification.merchantAddress}
                       </span>
                     </div>
                   )}
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2">
                     <span className="text-muted-foreground">Created by:</span>
-                    <UserProfile
-                      npub={senderNpubForProfile || ""}
-                      showFull
-                      size="sm"
-                    />
+                    <div className="min-w-0">
+                      <UserProfile
+                        npub={senderNpubForProfile || ""}
+                        showFull
+                        size="sm"
+                      />
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                     <span className="text-muted-foreground">Created:</span>
                     <span className="text-foreground">
                       {new Date(
@@ -430,7 +434,7 @@ export default function NoteViewer() {
                     </span>
                   </div>
                   {currentData.verification.verifiedAt && (
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                       <span className="text-muted-foreground">Verified:</span>
                       <span className="text-foreground">
                         {new Date(

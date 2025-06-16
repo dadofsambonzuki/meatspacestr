@@ -79,13 +79,13 @@ export default function VerifyPage() {
       <Navigation />
       <div className="flex items-center justify-center p-4 pt-16">
         <Card className="w-full max-w-md">
-          <CardHeader>
-          <CardTitle>Verify Attestation</CardTitle>
-          <CardDescription>
+          <CardHeader className="px-4 md:px-6">
+          <CardTitle className="text-xl md:text-2xl">Verify Attestation</CardTitle>
+          <CardDescription className="text-sm md:text-base">
             Enter your verification token below to verify your Proof of Place Attestation.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 md:px-6">
           {!verificationResult && (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
