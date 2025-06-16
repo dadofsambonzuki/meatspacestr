@@ -15,8 +15,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <OGImageGenerator 
-        title="Proof-of-Place Attestations over Nostr"
-        description="Cryptographically verify that a Nostr identity in cyberspace has access to a physical address in meatspace"
+        title="Proof-of-Place Attestations"
+        description="Anchoring digital identities in cyberspace to physical addresses in meatspace."
         brandName="meatspacestr"
       />
       <Navigation />
@@ -24,13 +24,13 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="font-bold text-foreground mb-6 text-2xl md:text-3xl lg:text-[44px] leading-tight">
-            Proof-of-Place Attestations over Nostr
+            Proof-of-Place Attestations
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Cryptographically verify that a Nostr identity in{" "}
+            Anchoring digital identities in{" "}
             <span className="font-semibold text-blue-600">cyberspace</span>
             <br className="hidden sm:block" />
-            has access to a physical address in{" "}
+            to physical addresses in{" "}
             <span className="font-semibold text-orange-600">meatspace</span>.
           </p>
         </div>
